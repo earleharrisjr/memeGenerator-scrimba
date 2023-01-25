@@ -21,19 +21,34 @@ export default function Meme() {
         }))
     };
 
+//below will update the text as you type
+    function handleChange(event) {
+        const {name, value} = event.target
+        setMeme(prevMeme => ({
+            ...prevMeme,
+            [name]: value
+        }))
+    }
+
     return (
         <main>
             <div className="form--meme">
                 <input type="text"
                     id="top"
                     placeholder={meme.topText}
-                    className="form--input">
-                </input>
+                    className="form--input"
+                    name="topText"
+                    value={meme.topText}
+                    onChange={handleChange}
+                    />
                 <input type="text"
                     id="bottom"
                     placeholder={meme.bottomText}
-                    className="form--input">
-                </input>
+                    className="form--input"
+                    name="bottomText"
+                    value={meme.bottomText}
+                    onChange={handleChange}
+                />
                 <button type="submit"
                     className="form--button"
                     onClick={getMemeImage}
@@ -41,7 +56,11 @@ export default function Meme() {
                     Get a new meme image 🖼
                 </button>
             </div>
-            <img src={meme.randomImage} className="meme--image" />
+            <div className="meme">
+                <img src={meme.randomImage} className="meme--image" />
+                <h2 className="meme--text top">{meme.topText}</h2>
+                <h2 className="meme--text bottom">{meme.bottomText}</h2>
+            </div>
 
         </main>
     )
