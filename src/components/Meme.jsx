@@ -1,5 +1,5 @@
 import React from "react";
-import memesData from "../memesData";
+
 
 export default function Meme() {
     const [meme, setMeme] = React.useState({
@@ -8,11 +8,20 @@ export default function Meme() {
         randomImage: "http://i.imgflip.com/1bij.jpg",
     });
 
-    const [allMemeImages, setAllMemeImages] = React.useState(memesData);
+    const [allMemes, setAllMemes] = React.useState([]);
+    console.log(allMemes)
+
+    React.useEffect(function () {
+        console.log("Effect ran")
+        fetch(`https://api.imgflip.com/get_memes`)
+            .then(res => res.json())
+            .then(data => setAllMemes(data.data.memes))
+    }, [])
+
 
 
     function getMemeImage() {
-        const memesArray = allMemeImages.data.memes;
+        const memesArray = allMemes;
         const randomNumber = Math.floor(Math.random() * memesArray.length);
         const url = memesArray[randomNumber].url
         setMeme(prevMeme => ({
@@ -21,9 +30,9 @@ export default function Meme() {
         }))
     };
 
-//below will update the text as you type
+    //below will update the text as you type
     function handleChange(event) {
-        const {name, value} = event.target
+        const { name, value } = event.target
         setMeme(prevMeme => ({
             ...prevMeme,
             [name]: value
@@ -40,7 +49,7 @@ export default function Meme() {
                     name="topText"
                     value={meme.topText}
                     onChange={handleChange}
-                    />
+                />
                 <input type="text"
                     id="bottom"
                     placeholder={meme.bottomText}
@@ -51,8 +60,7 @@ export default function Meme() {
                 />
                 <button type="submit"
                     className="form--button"
-                    onClick={getMemeImage}
-                >
+                    onClick={getMemeImage}>
                     Get a new meme image 🖼
                 </button>
             </div>
